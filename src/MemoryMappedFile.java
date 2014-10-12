@@ -16,7 +16,7 @@ public class MemoryMappedFile{
     if(this.fd==null){
       throw new FileChannelIsNullException("Could not open the filechannel!");
     }
-    return fd;
+    return this.fd;
   }
 
   public void closeFileChannel() throws FileChannelIsNullException {
