@@ -51,3 +51,13 @@ futex_wait(struct futex * f, int val, struct timespec * reltime) {
     else
         return ret;
 }
+
+int
+futex_wake(struct futex* f, int val, struct timespec* reltime){
+  for( int i = 0 ; i < val; i++){
+    find hash bucket and wake next process in wait queue
+    if( process awoken)   count++;
+    else continue;
+  }
+  return number of processes woken
+ }
