@@ -1,28 +1,30 @@
 // reference skeleton code for java implementation of ours.futex.c
 //
+import java.util.*;
+import java.nio.MappedByteBuffer;
 public class Futex{
   private int pid;
-  private String fname;
   private int offset;
-  public Futex(int pid, String fname, int offset){
+  private MappedByteBuffer buf;
+  public Futex(int pid, MappedByteBuffer buf, int offset){
     this.pid=pid;
-    this.fname=fname;
+    this.buf=buf;
     this.offset=offset;
   }
   public void setPid(int newPid){
     this.pid=newPid;
   }
-  public void setFname(String newFname){
-    this.fname=newFname;
-  }
   public void setOffset(int newOffset){
     this.offset=newOffset;
+  }
+  public void setMapBuf(MappedByteBuffer buf){
+    this.buf=buf;
   }
   public int getPid(){
     return this.pid;
   }
-  public String getFname(){
-    return this.fname;
+  public MappedByteBuffer getBuf(){
+    return this.buf;
   }
   public int getOffset(){
     return this.offset;
