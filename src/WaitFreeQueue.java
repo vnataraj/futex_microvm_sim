@@ -49,7 +49,6 @@ class OpDesc
 class WaitFreeQueue
 {
     public static final int NUM_THRDS = 1000;   // Dummy values
-    public static final int TID = 123;
 
     AtomicReference<Node> head, tail;
     AtomicReferenceArray<OpDesc> state;
@@ -94,7 +93,7 @@ class WaitFreeQueue
         return state.get(tid).pending && state.get(tid).phase <= ph;
     }
 
-    void enq(int value)
+    void enq(int value, int TID)
     {
         long phase = maxPhase() + 1;
         state.set(TID, new OpDesc(phase, true, true, new Node(value, TID)));
@@ -136,7 +135,7 @@ class WaitFreeQueue
         }
     }
 
-    int deq() throws EmptyException
+    int deq(int TID) throws EmptyException
     {
         long phase = maxPhase() + 1;
         state.set(TID, new OpDesc(phase, true, false, null));

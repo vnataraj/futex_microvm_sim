@@ -9,6 +9,9 @@ CLASSES = \
 					Simulation.java \
 					FileChannelIsNullException.java \
 					MemoryMappedFile.java \
+					ThreadExample.java \
+					UnsafeExample.java \
+					WaitFreeQueue.java \
 
 default: classes
 
