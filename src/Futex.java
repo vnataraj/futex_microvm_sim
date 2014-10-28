@@ -1,32 +1,23 @@
 // reference skeleton code for java implementation of ours.futex.c
 //
 import java.util.*;
-import java.nio.MappedByteBuffer;
 public class Futex{
-  private int pid;
-  private int offset;
-  private MappedByteBuffer buf;
-  public Futex(int pid, MappedByteBuffer buf, int offset){
-    this.pid=pid;
-    this.buf=buf;
-    this.offset=offset;
+  private long tid;
+  public Futex(){
+    this.tid=-1;  
   }
-  public void setPid(int newPid){
-    this.pid=newPid;
+  public long whoseLock(){
+    return this.tid;
   }
-  public void setOffset(int newOffset){
-    this.offset=newOffset;
+  public void changeOwnership(long tid){
+    this.tid=tid;
   }
-  public void setMapBuf(MappedByteBuffer buf){
-    this.buf=buf;
-  }
-  public int getPid(){
-    return this.pid;
-  }
-  public MappedByteBuffer getBuf(){
-    return this.buf;
-  }
-  public int getOffset(){
-    return this.offset;
+  public boolean okayToGiveLock(long accesstid, boolean bool){
+    if((bool==true) && (this.tid == accesstid)){
+      return true;
+    }
+    else{
+      return false;
+    }
   }
 }
