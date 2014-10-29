@@ -7,18 +7,42 @@ public class FutexHandler{
   // as per ours.futex.c:
   // futex_wait offers atomicity while remaining entirely within user space.
   // TODO: futex_wait
-  public int futex_wait(Futex f, long tid, int val, int timeout){
-    int count=0;
-    while(!f.okayToGiveLock(tid, true) || timeout != count){
-      count++;
+
+  // -1 = EWOULDBLOCK
+  // -2 = ETIMEDOUT
+  // -3 = EINTR
+  public int futex_wait(Futex f, int reltime){
+    int ret = 0;
+    if (waitMap.get(f) == null)
+      waitMap.put(f, new WaitFreeQueue());
+    Thread curr = Thread.currentThread();
+    if(f.whoseLock() != curr.getId()){
+      ret = -1;
+      waitMap.get(f).enq(curr, (int)curr.getId());
+      try {
+          curr.sleep(reltime);
+          ret = -2
+      }
+      catch (InterruptedException e) {
+        ret = -3;
+      }
     }
-    waitMap.get(f).enq(val, (int)tid);
+    return ret;
   }
-  // also as per ours.futex.c: 
+  // also as per ours.futex.c:
   // futex_wake wakes next \val\ processes in wait queue
   // returns count of how many processes awoken
-  public int futex_wake(Futex f, int val, int spin_counts){
-    return 0;
+  public int futex_wake(Futex f, int val){
+    for (int i = 0;i < val; i++) {
+      try {
+        Thread d = waitMap.get(f).deq((int)Thread.currentThread().getId());
+        d.interrupt();
+      }
+      catch (EmptyException e){
+        return i;
+      }
+    }
+    return val;
   }
 
   public static void main(String[] args){
