@@ -12,6 +12,7 @@ CLASSES = \
 					ThreadExample.java \
 					UnsafeExample.java \
 					WaitFreeQueue.java \
+					Simulation.java \
 
 default: classes
 

@@ -22,17 +22,17 @@ public class ThreadExample extends Thread{
     ex1.start();
     ex2.start();
     ex3.start();
-    q.enq(ex1.getVal(), (int)ex1.getId());
-    q.enq(ex2.getVal(), (int)ex2.getId());
-    q.enq(ex3.getVal(), (int)ex3.getId());
+    q.enq(ex1, (int)ex1.getId());
+    q.enq(ex2, (int)ex2.getId());
+    q.enq(ex3, (int)ex3.getId());
     Scanner s = new Scanner(System.in);
     System.out.println("Press any character to deq");
     while(true){
       if(s.hasNext()){
         try{
-        System.out.println("Thread 1 Decrementing with value: "+q.deq((int)ex1.getId()));
-        System.out.println("Thread 2 Decrementing with value: "+q.deq((int)ex2.getId()));
-        System.out.println("Thread 3 Decrementing with value: "+q.deq((int)ex3.getId()));
+        System.out.println("Thread 1 Decrementing with value: "+q.deq((int)ex1.getId()).getId());
+        System.out.println("Thread 2 Decrementing with value: "+q.deq((int)ex2.getId()).getId());
+        System.out.println("Thread 3 Decrementing with value: "+q.deq((int)ex3.getId()).getId());
         break;
         } catch(EmptyException ex){
           System.out.println("We're running on empty cap'n!");
