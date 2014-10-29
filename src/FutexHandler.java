@@ -16,16 +16,14 @@ public class FutexHandler{
   }
   // as per ours.futex.c:
   // futex_wait offers atomicity while remaining entirely within user space.
-  // TODO: futex_wait
 
-  // -1 = EWOULDBLOCK
-  // -2 = ETIMEDOUT
-  // -3 = EINTR
-  //
   public Futex getFutexById(int id) throws IndexOutOfBoundsException {
     return this.futexList.get(id);
   }
 
+  // TODO:
+  //    1. Variable time
+  //    2. Ask Hosking about sleep vs suspend
   public int futex_wait(Futex f){
     int ret = 0;
     if (waitMap.get(f) == null)
