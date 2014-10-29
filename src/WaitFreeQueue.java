@@ -11,16 +11,17 @@
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.AtomicReferenceArray;
+import java.lang.Thread;
 
 class Node
 {
     // Holds elements of the underlying list representation of the WFQueue
-    int value;
+    Thread value;
     int enqTid;
     AtomicInteger deqTid;
     AtomicReference<Node> next;
 
-    public Node(int val, int etid)
+    public Node(Thread val, int etid)
     {
         value = val;
         next = new AtomicReference<Node>(null);
@@ -55,7 +56,7 @@ class WaitFreeQueue
 
     public WaitFreeQueue()
     {
-        Node sentinel = new Node(-1, -1);
+        Node sentinel = new Node(Thread.currentThread(), -1);
         head = new AtomicReference<Node>(sentinel);
         tail = new AtomicReference<Node>(sentinel);
         state = new AtomicReferenceArray<OpDesc>(NUM_THRDS);
@@ -93,7 +94,7 @@ class WaitFreeQueue
         return state.get(tid).pending && state.get(tid).phase <= ph;
     }
 
-    void enq(int value, int TID)
+    void enq(Thread value, int TID)
     {
         long phase = maxPhase() + 1;
         state.set(TID, new OpDesc(phase, true, true, new Node(value, TID)));
@@ -135,7 +136,7 @@ class WaitFreeQueue
         }
     }
 
-    int deq(int TID) throws EmptyException
+    Thread deq(int TID) throws EmptyException
     {
         long phase = maxPhase() + 1;
         state.set(TID, new OpDesc(phase, true, false, null));

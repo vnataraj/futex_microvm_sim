@@ -6,7 +6,7 @@ JC = javac
 
 CLASSES = \
 					Futex.java \
-					Simulation.java \
+					FutexHandler.java \
 					FileChannelIsNullException.java \
 					MemoryMappedFile.java \
 					ThreadExample.java \
