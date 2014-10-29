@@ -22,9 +22,9 @@ public class ThreadExample extends Thread{
     ex1.start();
     ex2.start();
     ex3.start();
-    q.enq(ex1.getVal(), (int)ex1.getId());
-    q.enq(ex2.getVal(), (int)ex2.getId());
-    q.enq(ex3.getVal(), (int)ex3.getId());
+    q.enq(ex1, (int)ex1.getId());
+    q.enq(ex2, (int)ex2.getId());
+    q.enq(ex3, (int)ex3.getId());
     Scanner s = new Scanner(System.in);
     System.out.println("Press any character to deq");
     while(true){
