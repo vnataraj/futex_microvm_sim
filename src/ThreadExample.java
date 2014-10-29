@@ -30,9 +30,9 @@ public class ThreadExample extends Thread{
     while(true){
       if(s.hasNext()){
         try{
-        System.out.println("Thread 1 Decrementing with value: "+q.deq((int)ex1.getId()));
-        System.out.println("Thread 2 Decrementing with value: "+q.deq((int)ex2.getId()));
-        System.out.println("Thread 3 Decrementing with value: "+q.deq((int)ex3.getId()));
+        System.out.println("Thread 1 Decrementing with value: "+q.deq((int)ex1.getId()).getId());
+        System.out.println("Thread 2 Decrementing with value: "+q.deq((int)ex2.getId()).getId());
+        System.out.println("Thread 3 Decrementing with value: "+q.deq((int)ex3.getId()).getId());
         break;
         } catch(EmptyException ex){
           System.out.println("We're running on empty cap'n!");
