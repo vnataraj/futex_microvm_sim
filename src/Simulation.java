@@ -13,8 +13,10 @@ public class Simulation extends Thread{
     Futex fut = this.f.getFutexById(1);
     if(fut.whoseLock()==-1){
       fut.changeOwnership(Thread.currentThread().getId());
+      System.out.println("This is the current lock holder's val: "+val+"!");
+      System.out.println("wallaby");
     } else if(this.f.futex_wait(fut)==0){
-      System.out.println("This is val: "+val);
+      System.out.println("Woken up thread with id: "+val);
     }
   }
 
@@ -28,7 +30,7 @@ public class Simulation extends Thread{
     sb.start();
     sc.start();
     while(true){
-      if(s.hasNext()){
+      if(s.nextLine()!=null){
         f.futex_wake(f.getFutexById(1), 3);
         break;
       }
