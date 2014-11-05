@@ -1,9 +1,10 @@
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class FutexHandler{
 
-  public static Map<Futex, WaitFreeQueue> waitMap;
+  public static HashMap<AtomicInteger, WaitFreeQueue> waitMap;
   // as per ours.futex.c:
   // futex_wait offers atomicity while remaining entirely within user space.
   // TODO: futex_wait
@@ -11,23 +12,25 @@ public class FutexHandler{
   // -1 = EWOULDBLOCK
   // -2 = ETIMEDOUT
   // -3 = EINTR
-  public int futex_wait(Futex f, int reltime){
-    int ret = 0;
-    if (waitMap.get(f) == null)
-      waitMap.put(f, new WaitFreeQueue());
+  public int futex_wait(AtomicInteger futex, int val, int reltime){
+    int hash = futex.hashCode();
     Thread curr = Thread.currentThread();
-    if(f.whoseLock() != curr.getId()){
-      ret = -1;
-      waitMap.get(f).enq(curr, (int)curr.getId());
-      try {
-          curr.sleep(reltime);
-          ret = -2
-      }
-      catch (InterruptedException e) {
-        ret = -3;
+    if (waitMap.get(futex) == null){
+      waitMap.put(futex, new WaitFreeQueue());
+    }
+    if (!futex.compareAndSet(val, val)) {
+      return -1;
+    }
+    waitMap.get(futex).enq(curr, (int)curr.getId());
+    try {
+      Thread.currentThread().sleep(reltime);
+      return -2;
+    } catch (Exception e) {
+      if (waitMap.get(futex).getHead() == curr) {
+        return -3;
       }
     }
-    return ret;
+    return 0;
   }
   // also as per ours.futex.c:
   // futex_wake wakes next \val\ processes in wait queue
@@ -48,7 +51,7 @@ public class FutexHandler{
   public static void main(String[] args){
     //test code here
     System.out.println("Hello World!");
-    waitMap = new HashMap<Futex, WaitFreeQueue>();
+    waitMap = new HashMap<AtomicInteger, WaitFreeQueue>();
     //insert futexes or something
   }
 

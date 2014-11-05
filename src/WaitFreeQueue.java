@@ -1,7 +1,7 @@
 /*
  * WaitFreeQueue.java
  *
- *      This file contains Kogan and Petrank's implementation of wait-free 
+ *      This file contains Kogan and Petrank's implementation of wait-free
  *      queues as seen in their paper:
  *      Wait-Free Queues With Multiple Enqueuers and Dequeuers
  *
@@ -72,7 +72,7 @@ class WaitFreeQueue
             if (desc.pending && desc.phase <= phase) {
                 if (desc.enqueue)
                     help_enq(i, phase);
-                else 
+                else
                     help_deq(i, phase);
             }
         }
@@ -110,7 +110,7 @@ class WaitFreeQueue
             if (last == tail.get()) {
                 if (next == null && isStillPending(tid, phase) &&
                     last.next.compareAndSet(next, state.get(tid).node)) {
-                    
+
                     help_finish_enq();
                     return;
                 }
@@ -170,7 +170,7 @@ class WaitFreeQueue
                 else {
                     OpDesc curDesc = state.get(tid);
                     Node node = curDesc.node;
-                    if (!isStillPending(tid, phase)) 
+                    if (!isStillPending(tid, phase))
                         break;
                     if (first == head.get() && node != first) {
                         OpDesc newDesc = new OpDesc(state.get(tid).phase, true, false, first);
@@ -197,6 +197,9 @@ class WaitFreeQueue
                 head.compareAndSet(first, next);
             }
         }
+    }
+    Thread getHead(){
+      return head.get().value;
     }
 }
 
